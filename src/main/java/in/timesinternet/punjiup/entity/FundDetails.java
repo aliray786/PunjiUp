@@ -32,7 +32,7 @@ public class FundDetails {
     @Embedded
     private CloseEndFund closeEndFund;
     @Column(nullable = false)
-    private  Integer NAV;
+    private  Double NAV;
     @Column(nullable = false)
     private  Double ExpenseRatio;
     @Column(nullable = false)

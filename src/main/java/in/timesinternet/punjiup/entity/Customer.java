@@ -25,6 +25,8 @@ public class Customer implements Serializable {
     private Integer customerId;
     @Column(nullable = false, unique = true, updatable = false)
     private String Email;
+    @Column(nullable = false)
+    private String Cus_password;
     private String firstName;
     private String lastName;
     private Boolean isActive;

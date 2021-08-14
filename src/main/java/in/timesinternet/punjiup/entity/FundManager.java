@@ -24,8 +24,7 @@ public class FundManager {
     @Column(nullable = false,unique = true,updatable = false,length = 50)
     private String Email;
     @Column(nullable = false,length = 16)
-    private String password;
-
+    private String mgr_password;
     @Column(nullable = false,length = 50)
     private  String firstName;
     @Column(nullable = false,length = 50)

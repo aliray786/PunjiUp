@@ -72,18 +72,28 @@ import java.util.List;
 
           @GetMapping("/{customerId}/cart")
           List<Transaction> showCart(@PathVariable int customerId) {
-
+                 System.out.print("inside show cart");
               return customerServiceImp.showCart(customerId);
           }
 
 
           @DeleteMapping("/cart/delete")
-          String deleteCartItem(@RequestBody CartUpdateDto cartUpdateDto) {
-              return customerServiceImp.deleteTransaction(cartUpdateDto);
+          String deleteCartItem(@RequestBody DeleteCartItemDto deleteCartItemDto) {
+              return customerServiceImp.deleteTransaction(deleteCartItemDto);
           }
 
           @GetMapping("/")
           Object customerPositionDetail(@PathVariable CustomerFund customerFund) {
               return null;
+          }
+
+          @PostMapping("/buycart")
+          List<Transaction> buy(@RequestBody BuyDto buyDto){
+              return customerServiceImp.buyCart(buyDto);
+          }
+
+          @PostMapping("/buy")
+          Transaction buy(@RequestBody TransactionDto transactionDto){
+              return customerServiceImp.buy(transactionDto);
           }
       }

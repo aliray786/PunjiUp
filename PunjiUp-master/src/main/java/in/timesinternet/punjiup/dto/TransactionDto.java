@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 public class TransactionDto {
     TransactionType transactionType;
-    TransactionStatus transactionStatus;
     Double amount;
     Integer fundId;
     Integer customerId;

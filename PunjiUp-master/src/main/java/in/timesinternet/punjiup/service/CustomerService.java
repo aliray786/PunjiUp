@@ -1,8 +1,5 @@
 package in.timesinternet.punjiup.service;
-import in.timesinternet.punjiup.dto.CartUpdateDto;
-import in.timesinternet.punjiup.dto.CustomerDto;
-import in.timesinternet.punjiup.dto.InvestorUpdateDto;
-import in.timesinternet.punjiup.dto.TransactionDto;
+import in.timesinternet.punjiup.dto.*;
 import in.timesinternet.punjiup.entity.Customer;
 import in.timesinternet.punjiup.entity.FundDetails;
 import in.timesinternet.punjiup.entity.FundManager;
@@ -10,6 +7,7 @@ import in.timesinternet.punjiup.entity.Transaction;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -23,6 +21,8 @@ public interface CustomerService {
     List<FundDetails> getAllTypeFund(FundType fundtype);
     public List<Transaction> showCart(int customerId);
     public List<FundDetails> getFundsBySearch(String search);
-    public String deleteTransaction(CartUpdateDto cartUpdateDto);
+    public String deleteTransaction(DeleteCartItemDto deleteCartItemDto);
     public List<FundManager> getFundManagerBySearch(String search1, String search2);
+    public List<Transaction> buyCart( BuyDto buyDto);
+    Transaction buy( TransactionDto transactionDto);
 }

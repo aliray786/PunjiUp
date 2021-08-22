@@ -1,9 +1,6 @@
 package in.timesinternet.punjiup.service.impl;
 
-import in.timesinternet.punjiup.dto.CartUpdateDto;
-import in.timesinternet.punjiup.dto.CustomerDto;
-import in.timesinternet.punjiup.dto.InvestorUpdateDto;
-import in.timesinternet.punjiup.dto.TransactionDto;
+import in.timesinternet.punjiup.dto.*;
 import in.timesinternet.punjiup.entity.*;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -67,6 +65,8 @@ public class CustomerServiceImp implements CustomerService {
         transaction.setNav(fundDetails.getNav());
         Double shares=transactionDto.getAmount()/fundDetails.getNav();
         transaction.setTotalShares(shares);
+        transaction.setTransactionStatus(TransactionStatus.inCart);
+        transaction.setFundDetails(fundDetails);
         return transactionRepository.save(transaction);
     }
 
@@ -92,12 +92,14 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public List<Transaction> showCart(int customerId){
-        return transactionRepository.findAllByTransactionStatusAndCustomerCustomerId(TransactionStatus.inCart,customerId);
+          Customer customer=customerRepository.getById(customerId);
+          System.out.print(customer);
+        return transactionRepository.findAllByTransactionStatusAndCustomer(TransactionStatus.inCart,customer);
     }
 
     @Override
-    public String deleteTransaction(CartUpdateDto cartUpdateDto){
-         transactionRepository.deleteById(cartUpdateDto.getTransactionId());
+    public String deleteTransaction(DeleteCartItemDto deleteCartItemDto){
+         transactionRepository.deleteById(deleteCartItemDto.getTransactionId());
          return "Successfully Deleted";
     }
 
@@ -113,8 +115,37 @@ public class CustomerServiceImp implements CustomerService {
 
 
 
-    public List<CustomerFund> customerPositionDetail(@PathVariable CustomerFund customerFund){
+    public List<CustomerFund> customerPositionDetail( CustomerFund customerFund){
        return null;
+    }
+
+    public List<Transaction> buyCart(BuyDto buyDto ){
+        Customer customer=customerRepository.getById(buyDto.getCustomerId());
+
+        List<Transaction> transactionList=transactionRepository.findAllByTransactionStatusAndCustomer(TransactionStatus.inCart,customer);
+        for(Transaction t:transactionList){
+            t.setTransactionStatus(TransactionStatus.pending);
+            Transaction transaction=transactionRepository.save(t);
+        }
+        return transactionList;
+
+    }
+
+    @Override
+    public  Transaction buy(TransactionDto transactionDto){
+        Transaction transaction=new Transaction();
+        transaction.setTransactionType(transactionDto.getTransactionType());
+        transaction.setAmount(transactionDto.getAmount());
+        Customer customer=customerRepository.getById(transactionDto.getCustomerId());
+        transaction.setCustomer(customer);
+        FundDetails fundDetails=fundDetailsRepository.getById(transactionDto.getFundId());
+        transaction.setNav(fundDetails.getNav());
+        Double shares=transactionDto.getAmount()/fundDetails.getNav();
+        transaction.setTotalShares(shares);
+        transaction.setTransactionStatus(TransactionStatus.pending);
+        transaction.setFundDetails(fundDetails);
+        return transactionRepository.save(transaction);
+
     }
 
 }

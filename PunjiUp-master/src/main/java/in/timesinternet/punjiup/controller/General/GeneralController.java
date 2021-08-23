@@ -27,7 +27,7 @@ public class GeneralController {
     }
 
 
-    @GetMapping("/fund/{fundId}")
+    @GetMapping("/{fundId}/fund")
     FundDetails getFund(@PathVariable int fundId)
     {
         return customerServiceImp.getFund(fundId);
@@ -39,7 +39,7 @@ public class GeneralController {
        return customerServiceImp. getFundsBySearch(search);
    }
 
-    @GetMapping("/fundManager")
+    @GetMapping("/search/fundManager")
      List<FundManager> getFundManagerBySearch(@RequestParam String search){
         return customerServiceImp.getFundManagerBySearch(search,search);
     }

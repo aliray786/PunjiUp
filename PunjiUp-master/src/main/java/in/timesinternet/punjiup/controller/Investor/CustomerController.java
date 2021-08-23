@@ -44,9 +44,9 @@ import java.util.List;
               return customerServiceImp.getAllFunds();
           }
 
-          @GetMapping("/fund/{FundId}")
+          @GetMapping("/{FundId}/fund")
           FundDetails getFund(@PathVariable int FundId) {
-              //Return perticular Fund;
+              //Return particular Fund;
               return customerServiceImp.getFund(FundId);
           }
 

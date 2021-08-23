@@ -33,14 +33,12 @@ public class GeneralController {
         return customerServiceImp.getFund(fundId);
     }
 
-   @GetMapping("/fundList")
-   List<FundDetails>  getFundList(@RequestParam String search)
-   {
-       return customerServiceImp. getFundsBySearch(search);
-   }
-
-    @GetMapping("/search/fundManager")
-     List<FundManager> getFundManagerBySearch(@RequestParam String search){
+    @GetMapping("/fundList")
+    List<FundDetails> getFundBySearch(@RequestParam(name = "name", required = true) String search) {
+        return customerServiceImp.getFundsBySearch(search);
+    }
+    @GetMapping("/fundManager")
+     List<FundManager> getFundManagerBySearch(@RequestParam(name = "name", required = true) String search){
         return customerServiceImp.getFundManagerBySearch(search,search);
     }
 

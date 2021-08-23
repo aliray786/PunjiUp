@@ -5,18 +5,21 @@ import in.timesinternet.punjiup.entity.*;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
 import in.timesinternet.punjiup.entity.enumaration.TransactionStatus;
+import in.timesinternet.punjiup.exception.UserAlreadyExistException;
 import in.timesinternet.punjiup.repository.CustomerRepository;
 import in.timesinternet.punjiup.repository.FundDetailsRepository;
 import in.timesinternet.punjiup.repository.FundManagerRepository;
 import in.timesinternet.punjiup.repository.TransactionRepository;
 import in.timesinternet.punjiup.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImp implements CustomerService {
@@ -36,7 +39,7 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer createAccount(CustomerDto customerDto) {
-        {
+
             Customer customer = new Customer();
             customer.setEmail(customerDto.getEmail());
             customer.setAddress(customerDto.getAddress());
@@ -46,7 +49,9 @@ public class CustomerServiceImp implements CustomerService {
             return customerRepository.save(customer);
         }
 
-    }
+
+
+
 
     @Override
     public List<FundDetails> getAllFunds() {

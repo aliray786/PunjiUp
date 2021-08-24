@@ -21,18 +21,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     AuthenticationManager authenticationManager;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     JWTUtil jwtUtil;
-
-
-
     @Override
     public HashMap<String, Object> login(String email, String password) {
-
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         GrantedAuthority role = authentication.getAuthorities().stream().findFirst().get();
         in.timesinternet.punjiup.entity.User user =userRepository.findByEmail(email).get();

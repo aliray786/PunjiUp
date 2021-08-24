@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 @RestController
 @RequestMapping("/api/fundmanager")
+@CrossOrigin
 public class ManagerController {
     @Autowired
     FundDetailsRepository fundDetailsRepository;

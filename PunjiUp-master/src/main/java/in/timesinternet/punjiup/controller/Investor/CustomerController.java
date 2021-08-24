@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("api/investor")
+@CrossOrigin
 public class CustomerController {
     @Autowired
     CustomerServiceImp customerServiceImp;

@@ -3,6 +3,7 @@ import in.timesinternet.punjiup.entity.enumaration.FundType;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class GeneralController {
     @GetMapping("funds")
     Object getAllFunds()

@@ -31,7 +31,7 @@ public class FundManagerServiceImpl implements FundManagerService {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Override
-    public FundManager createFundManagerAccount(FundmanagerDto fundmanagerDto) {
+    public FundManager createFundManagerAccount(FundManagerDto fundmanagerDto) {
         FundManager fundManager=new FundManager();
         fundManager.setEmail(fundmanagerDto.getEmail());
         fundManager.setCompanyName(fundmanagerDto.getCompanyName());
@@ -154,8 +154,15 @@ public class FundManagerServiceImpl implements FundManagerService {
     @Override
     public FundDetails getFund(int fundId,String email) {
         FundManager fundManager=fundManagerRepository.findByEmail(email).get();
-       FundDetails fundDetails=fundDetailsRepository.findByFundIdAndFundManager(fundId,fundManager);
-       return fundDetails;
+     Optional<FundDetails> optionalFundDetails=fundDetailsRepository.findByFundIdAndFundManager(fundId,fundManager);
+     if(optionalFundDetails.isPresent())
+     {
+         return optionalFundDetails.get();
+     }
+     else
+     {
+         throw new NotFoundException("FUnd detail with given Id is not found");
+     }
     }
 
     @Override
@@ -211,7 +218,7 @@ public class FundManagerServiceImpl implements FundManagerService {
         if (fundManagerOptional.isPresent()) {
             return fundManagerOptional.get();
         } else {
-            throw new RuntimeException("Manager not found");
+            throw new NotFoundException("Manager not found");
         }
     }
 
@@ -225,7 +232,7 @@ public class FundManagerServiceImpl implements FundManagerService {
             FundManager  fundManager=fundManagerOptional.get();
             return transactionRepository.findByFundDetailsFundManagerAndFundDetails(fundManager,fundDetails);
         } else {
-            throw new RuntimeException("Fund is not found");
+            throw new NotFoundException("Fund is not found");
         }
     }
 

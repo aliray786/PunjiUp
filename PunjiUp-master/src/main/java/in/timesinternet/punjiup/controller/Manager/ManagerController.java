@@ -4,15 +4,21 @@ import in.timesinternet.punjiup.entity.FundDetails;
 import in.timesinternet.punjiup.entity.FundManager;
 import in.timesinternet.punjiup.entity.Transaction;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
-import in.timesinternet.punjiup.entity.enumaration.FundType;
 import in.timesinternet.punjiup.entity.enumaration.TransactionStatus;
 import in.timesinternet.punjiup.repository.FundDetailsRepository;
 import in.timesinternet.punjiup.repository.FundManagerRepository;
 import in.timesinternet.punjiup.repository.TransactionRepository;
-import in.timesinternet.punjiup.service.impl.FundManagerServiceImpl;
+import in.timesinternet.punjiup.service.FundManagerService;
+import in.timesinternet.punjiup.service.UserService;
+import in.timesinternet.punjiup.service.impl.BindingResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 @RestController
 @RequestMapping("/api/fundmanager")
@@ -22,89 +28,123 @@ public class ManagerController {
     @Autowired
     FundManagerRepository fundManagerRepository;
     @Autowired
-    FundManagerServiceImpl fundManagerServiceImpl;
+    FundManagerService fundManagerService;
     @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
+    UserService userService;
+    @Autowired
+    BindingResultService bindingResultService;
     @PostMapping("/login")
-    Object loginManager(@RequestBody LoginDto loginDto)
+    ResponseEntity<HashMap<String, Object>> loginManager(@RequestBody @Valid  LoginDto loginDto, BindingResult bindingResult)
     {
-        return null;
+        bindingResultService.validate(bindingResult);
+
+        return ResponseEntity.ok(userService.login(loginDto.getEmail(),loginDto.getPassword()));
     }
     @PostMapping("/signup")
-    FundManager createManager(@RequestBody  FundManagerDto fundmanagerDto)
+    ResponseEntity<FundManager> createManager(@RequestBody  @Valid FundmanagerDto fundmanagerDto, BindingResult bindingResult)
     {
         //Manager Service Call;
-        FundManager fundManager=fundManagerServiceImpl.createFundManagerAccount(fundmanagerDto);
-        return fundManager;
+        bindingResultService.validate(bindingResult);
+        FundManager fundManager=fundManagerService.createFundManagerAccount(fundmanagerDto);
+        return ResponseEntity.ok(fundManager);
     }
     @GetMapping("/allfundmanager")
-    List<FundManager> fundManagerList()
+    ResponseEntity<List<FundManager> >fundManagerList()
     {
-        return fundManagerServiceImpl.getAllFundManager();
+        return ResponseEntity.ok(fundManagerService.getAllFundManager());
     }
 
-    @PutMapping("")
-    FundManager updateManager(@RequestBody FundManagerUpdateDTO fundManagerUpdateDTO)
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<FundManager >updateManager(@RequestBody @Valid  FundManagerUpdateDTO fundManagerUpdateDTO,HttpServletRequest httpServletRequest,BindingResult bindingResult)
     {
-        //update Mangaer Service Call
-        FundManager fundManager=fundManagerServiceImpl.UpdateManager(fundManagerUpdateDTO);
-        return  fundManager;
+        bindingResultService.validate(bindingResult);
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        FundManager fundManager=fundManagerService.UpdateManager(fundManagerUpdateDTO,userEmail);
+        return  ResponseEntity.ok(fundManager);
+    }
+    @GetMapping("")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGER')")
+    ResponseEntity<FundManager> getFundManager(HttpServletRequest httpServletRequest){
+        String userEmail =(String) httpServletRequest.getAttribute("userEmail");
+        return ResponseEntity.ok(fundManagerService.getFundManager(userEmail));
     }
     @PostMapping("/addfund")
-    FundDetails addFund(@RequestBody FundDto fundDto)
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+   ResponseEntity< FundDetails> addFund(@RequestBody @Valid  FundDto fundDto,HttpServletRequest httpServletRequest)
     {
         //update Mangaer Service Call
-        FundDetails fundDetails=fundManagerServiceImpl.addFund(fundDto);
-        return fundDetails;
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+       FundDetails fundDetails=fundManagerService.addFund(fundDto,userEmail);
+      return ResponseEntity.ok(fundDetails);
     }
     @PutMapping("/fundUpdate")
-    FundDetails fundUpdate(@RequestBody FundUpdateDto fundUpdateDto)
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+  ResponseEntity< FundDetails >fundUpdate(@RequestBody FundUpdateDto fundUpdateDto)
     {
         //update Mangaer Service Call
-        FundDetails fundDetails=fundManagerServiceImpl.fundUpdate(fundUpdateDto);
-        return fundDetails;
+        FundDetails fundDetails=fundManagerService.fundUpdate(fundUpdateDto);
+        return ResponseEntity.ok(fundDetails) ;
     }
-    @GetMapping("/{managerId}/funds")
-    List<FundDetails> getAllFund(@PathVariable Integer managerId)
+    @GetMapping("/funds")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity< List<FundDetails> >getAllFund(HttpServletRequest httpServletRequest)
     {
         //Get All funds for perticular manager
-        List<FundDetails>fundDetailsList=fundManagerServiceImpl.getAllFund(managerId);
-        return fundDetailsList;
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        List<FundDetails>fundDetailsList=fundManagerService.getAllFund(userEmail);
+        return ResponseEntity.ok(fundDetailsList);
     }
-    @GetMapping("/{mgrId}/fund/{fundId}")
-    Object getFund(@PathVariable Integer fundId, @PathVariable Integer mgrId)
+    @GetMapping("/fund/{fundId}")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+   ResponseEntity< FundDetails> getFund(@PathVariable Integer fundId,HttpServletRequest httpServletRequest)
     {
         //update Mangaer Service Call
-        FundManager fundManager=fundManagerRepository.getById(mgrId);
-        FundDetails fundDetails=fundManagerServiceImpl.getFund(fundId,fundManager);
-        return fundDetails;
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        FundDetails fundDetails=fundManagerService.getFund(fundId,userEmail);
+        return ResponseEntity.ok(fundDetails);
     }
-    @GetMapping("/{mgrId}/funds/{fundType}")
-    List<FundDetails >getAllTypeFund(@PathVariable FundType fundType, @PathVariable Integer mgrId)
+    @GetMapping("/funds/{fundType}")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<List<FundDetails >>getAllTypeFund(@PathVariable FundType fundType, HttpServletRequest httpServletRequest)
     {
         //get all open or close end fund;
-        List<FundDetails> fundDetailsList=fundManagerServiceImpl.getAllTypeFund(fundType,mgrId);
-        return fundDetailsList;
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        List<FundDetails> fundDetailsList=fundManagerService.getAllTypeFund(fundType,userEmail);
+        return ResponseEntity.ok(fundDetailsList);
     }
-    // To update Transaction Status
+  // To update Transaction Status
     @PutMapping("/fund/updatetransaction")
-    Transaction updateTransactionStatus(@RequestBody TransactionStatusUpdateDto transactionDto)
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<Transaction >updateTransactinStatus(@RequestBody TransactionUpdateManagerDTO transactionStatusUpdateDto)
     {
-        return fundManagerServiceImpl.updateTransactionStatus(transactionDto);
+        return ResponseEntity.ok(fundManagerService.updateTransactionStatus(transactionStatusUpdateDto));
     }
 
-
-    // To get all Unapproved Transaction
-    @GetMapping("/{managerId}/fund/transactions/{transactionStatus}")
-    List<Transaction> getTransaction(@PathVariable Integer managerId,@PathVariable TransactionStatus transactionStatus)
+   // To get all Unapproved Transaction
+    @GetMapping("/fund/transactions/{transactionStatus}")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<List<Transaction>> getTransaction(@PathVariable TransactionStatus transactionStatus,HttpServletRequest httpServletRequest)
     {
-        FundManager fundManager=fundManagerRepository.getById(managerId);
-        return transactionRepository.findTransactionByTransactionStatusAndFundDetailsFundManager(transactionStatus,fundManager);
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        FundManager fundManager=fundManagerRepository.findByEmail(userEmail).get();
+        return ResponseEntity.ok(transactionRepository.findTransactionByTransactionStatusAndFundDetailsFundManager(transactionStatus,fundManager));
     }
-    @GetMapping("{managerId}/transactions")
-    List<Transaction>getAllTransaction(@PathVariable Integer managerId)
+    @GetMapping("/fund/transactions")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<List<Transaction>>getAllTransaction(HttpServletRequest httpServletRequest)
     {
-        return fundManagerServiceImpl.getAllTransaction(managerId);
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        return ResponseEntity.ok(fundManagerService.getAllTransaction(userEmail));
+    }
+    @GetMapping("fund/{fundId}/transactions")
+    @PreAuthorize("hasRole('ROLE_FUNDMANAGAER')")
+    ResponseEntity<List<Transaction>> getTransactionFund(@PathVariable Integer fundId, HttpServletRequest httpServletRequest)
+    {
+        String userEmail=(String) httpServletRequest.getAttribute("userEmail");
+        return null;
     }
 
 

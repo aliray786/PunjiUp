@@ -9,20 +9,7 @@ import lombok.Setter;
 @Setter
 public class TransactionStatusUpdateDto {
     Integer transactionId;
-    TransactionStatus transactionStatus;
-    TransactionType transactionType;
     Double amount;
     Integer fundId;
     Integer customerId;
 }
-
-
-//
-//     {
-//             "transactionType":"Buy",
-//             "transactionStatus":"Pending",
-//             "amount":"1525.0",
-//             "fundId":"39",
-//             "customerId":"24"
-//
-//             }

@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FundManagerUpdateDTO {
-    private Integer mgrId;
     private String  mgrPassword;
     private String firstName;
     private String lastName;

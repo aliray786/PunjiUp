@@ -1,5 +1,6 @@
 package in.timesinternet.punjiup.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import in.timesinternet.punjiup.entity.embeddable.CloseEndFund;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
@@ -47,11 +48,22 @@ public class FundDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "fundDetails", cascade = CascadeType.ALL)
     private List<FundHistory> fundHistories = new ArrayList<FundHistory>();
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp
     private Date createdAt;
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp
     private Date updatedAt;
     @Column(nullable = false)
     private Double exitLoad;
-
+    void addTransaction(Transaction transaction)
+    {
+        transactionList.add(transaction);
+        transaction.setFundDetails(this);
+    }
+    void addFundHistory(FundHistory fundHistory)
+    {
+        fundHistories.add(fundHistory);
+        fundHistory.setFundDetails(this);
+    }
 }

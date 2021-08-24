@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CloseEndFund {
-    Date bstartdate;
+    Date bStartDate;
     Date bEndDate;
     Integer lockInPeriod;
 

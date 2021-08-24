@@ -17,9 +17,5 @@ public class FundDto {
     private Integer preference;
     private FundType fundType;
     private Double exitLoad;
-    private Integer mgrId;
-    private IsActive isActive;
     private CloseEndFund closeEndFund;
 }
-
-

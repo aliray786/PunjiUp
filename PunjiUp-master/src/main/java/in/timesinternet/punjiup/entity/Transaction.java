@@ -1,6 +1,8 @@
 package in.timesinternet.punjiup.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import in.timesinternet.punjiup.entity.enumaration.CartStatus;
 import in.timesinternet.punjiup.entity.enumaration.TransactionStatus;
 import in.timesinternet.punjiup.entity.enumaration.TransactionType;
 import lombok.AllArgsConstructor;
@@ -36,11 +38,12 @@ public class Transaction {
     private Double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Customer customer;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+   @ManyToOne(cascade = CascadeType.PERSIST)
     private FundDetails fundDetails;
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp
     private Date createdAt;
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp
     private Date updatedAt;
-
 }

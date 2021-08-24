@@ -1,46 +1,29 @@
 package in.timesinternet.punjiup.controller.General;
-import in.timesinternet.punjiup.entity.FundDetails;
-import in.timesinternet.punjiup.entity.FundManager;
 import in.timesinternet.punjiup.entity.enumaration.FundType;
-import in.timesinternet.punjiup.service.impl.CustomerServiceImp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/home")
+@RequestMapping("/api")
 public class GeneralController {
-    @Autowired
-    CustomerServiceImp customerServiceImp;
-    @GetMapping("/fund")
-    List<FundDetails> getAllFunds()
+    @GetMapping("funds")
+    Object getAllFunds()
     {
-        return customerServiceImp.getAllFunds();
+        //return list of funds;
+        return null;
     }
-
-
-    @GetMapping("/fund/{fundType}")
-    List<FundDetails> getAllTypeFund(@PathVariable FundType fundType)
+    @GetMapping("funds/{fundType}")
+    Object getAllFundsbyType(@PathVariable FundType fundType)
     {
-        return customerServiceImp.getAllTypeFund(fundType);
+        //return list of fund by Category like open end and close end;
+        return null;
     }
-
-
-    @GetMapping("/{fundId}/fund")
-    FundDetails getFund(@PathVariable int fundId)
+    @GetMapping("fund/{fundId}")
+    Object getfund(@PathVariable int fundId)
     {
-        return customerServiceImp.getFund(fundId);
+        //return Perticular fund
+        return null;
     }
+   //Doubt in How We can Implement Search By fund and FundManager
 
-    @GetMapping("/fundList")
-    List<FundDetails> getFundBySearch(@RequestParam(name = "name", required = true) String search) {
-        return customerServiceImp.getFundsBySearch(search);
-    }
-    @GetMapping("/fundManager")
-     List<FundManager> getFundManagerBySearch(@RequestParam(name = "name", required = true) String search){
-        return customerServiceImp.getFundManagerBySearch(search,search);
-    }
 
 
 }

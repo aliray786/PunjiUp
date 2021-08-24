@@ -1,5 +1,6 @@
 package in.timesinternet.punjiup.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,10 @@ public class FundHistory {
     private Date priceDate;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private FundDetails fundDetails;
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp
     private Date createdAt;
+    @JsonFormat( pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp
     private Date updatedAt;
 }

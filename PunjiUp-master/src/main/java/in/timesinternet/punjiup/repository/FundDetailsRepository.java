@@ -10,6 +10,14 @@ import java.util.Optional;
 
 public interface FundDetailsRepository extends JpaRepository<FundDetails, Integer> {
   List<FundDetails>  findAllByFundTypeAndFundManagerOrderByPreferenceAsc(FundType fundType, FundManager fundManager);
- Optional< FundDetails> findByFundIdAndFundManager(Integer fundId, FundManager fundManager);
-    List<FundDetails> findAllByFundManagerOrderByPreferenceAsc(FundManager fundManager);
+
+  FundDetails  findByFundIdAndFundManager(Integer fundId,FundManager fundManager);
+  List<FundDetails> findAllByFundManagerOrderByPreferenceAsc(FundManager fundManager);
+  List<FundDetails>  findAllByFundType(FundType fundType);
+  List<FundDetails>  findAllByFundNameContainingIgnoreCase(String fundName);
+
+
+  Optional<FundDetails> findById(Integer id);
+
+ 
 }

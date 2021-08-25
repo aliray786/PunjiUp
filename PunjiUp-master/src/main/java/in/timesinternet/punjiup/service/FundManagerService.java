@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FundManagerService {
-    FundManager createFundManagerAccount(FundmanagerDto fundmanagerDto);
+    FundManager createFundManagerAccount(FundManagerDto fundmanagerDto);
     ResponseEntity login(String email, String password);
     FundManager UpdateManager(FundManagerUpdateDTO fundManagerUpdateDTO,String userEmail);
     FundDetails addFund(FundDto fundDto,String userEmail);

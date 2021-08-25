@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/investor")
+@CrossOrigin
 public class CustomerController {
     @Autowired
     CustomerServiceImp customerServiceImp;

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.Column;
 @Getter
 @Setter
-public class FundmanagerDto {
+public class FundManagerDto {
     @Email(message = "invalid email")
     @NotNull(message = "email can't be null")
     private String email;

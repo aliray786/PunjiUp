@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 @RestController
 @RequestMapping("/api/fundmanager")
+@CrossOrigin
 public class ManagerController {
     @Autowired
     FundDetailsRepository fundDetailsRepository;
@@ -43,7 +44,7 @@ public class ManagerController {
         return ResponseEntity.ok(userService.login(loginDto.getEmail(),loginDto.getPassword()));
     }
     @PostMapping("/signup")
-    ResponseEntity<FundManager> createManager(@RequestBody  @Valid FundmanagerDto fundmanagerDto, BindingResult bindingResult)
+    ResponseEntity<FundManager> createManager(@RequestBody  @Valid FundManagerDto fundmanagerDto, BindingResult bindingResult)
     {
         //Manager Service Call;
         bindingResultService.validate(bindingResult);
@@ -144,7 +145,8 @@ public class ManagerController {
     ResponseEntity<List<Transaction>> getTransactionFund(@PathVariable Integer fundId, HttpServletRequest httpServletRequest)
     {
         String userEmail=(String) httpServletRequest.getAttribute("userEmail");
-        return null;
+
+        return ResponseEntity.ok(fundManagerService.getTransactionbyfund(fundId,userEmail));
     }
 
 

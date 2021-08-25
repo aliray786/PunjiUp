@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface FundManagerRepository extends JpaRepository<FundManager, Integer> {
     Optional<FundManager>findByEmail(String email);
+    List<FundManager> findFundManagerByFirstNameContainingOrLastNameContaining(String search1, String search2);
 }

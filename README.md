@@ -8,3 +8,7 @@ Then just import the whole project in Intellij
 After Start it as a Application
 Project Link:
 https://punjiup1.herokuapp.com/Home
+
+#Api Specs
+https://docs.google.com/spreadsheets/d/1YkEMBFVbTjXCo1WdMPE343wPWHirdJ34o1LCsJAJRbo/edit?usp=sharing
+
